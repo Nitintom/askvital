@@ -37,7 +37,7 @@ const port = 8080;
 
 app.use(
   cors({
-    origin: "https://askvital.com/",
+    origin: "https://www.askvital.com",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
   })
