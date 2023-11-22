@@ -124,7 +124,30 @@ export const deleteUser = async (req, res, next) => {
   }
 };
 
-// Admin-only Route
-export const adminRoute = (req, res) => {
-  res.status(200).json({ message: "This route is accessible by admins only." });
+export const adminRoute = async (req, res, next) => {
+  try {
+    // Fetch user data based on your requirements (e.g., fetching all users).
+    const users = await User.find({}, "-password"); // Exclude the password field from the response.
+
+    // Send the user data in the response.
+    res.status(200).json(users);
+  } catch (error) {
+    next(error);
+  }
 };
+
+// Delete User by Admin (No Authentication Required)
+export const deleteUserByAdmin = async (req, res, next) => {
+  try {
+    const userIdToDelete = req.params.id;
+    await User.findByIdAndDelete(userIdToDelete);
+    res.status(200).json("User has been deleted by admin.");
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
+
+
