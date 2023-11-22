@@ -3,18 +3,19 @@ import {
   createReview,
   getAllReviews,
   getReviewById,
-  updateReviewById,
-  deleteReviewById,
+  updateReviewByNameAndId,
+  deleteReviewByNameAndId,
 } from "../controllers/review.controller.js";
 
 const router = express.Router();
 
 // Define your review routes
 router.post("/reviews", createReview);
-router.post("/healthcare/:id/reviews", createReview); // This is for creating reviews associated with a healthcare entity
+router.post("/healthcare/:id/reviews", createReview);
 router.get("/reviews", getAllReviews);
 router.get("/reviews/:id", getReviewById);
-router.put("/reviews/:id", updateReviewById);
-router.delete("/reviews/:id", deleteReviewById);
+router.put("/healthcare/:name/reviews/:reviewId", updateReviewByNameAndId);
+
+router.delete("/healthcare/:name/reviews/:reviewId", deleteReviewByNameAndId);
 
 export default router;
