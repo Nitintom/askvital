@@ -1,19 +1,5 @@
 import mongoose from "mongoose";
 
-const reviewSchema = new mongoose.Schema({
-  qualityRating: Number,
-  compassionRating: Number,
-  cleanlinessRating: Number,
-  efficiencyRating: Number,
-  costRange: String,
-  review: String,
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: false,
-  },
-});
-
 const healthcareSchema = new mongoose.Schema(
   {
     name: {
@@ -35,7 +21,17 @@ const healthcareSchema = new mongoose.Schema(
     about: String,
     speciality: String,
     ratings: Number,
-    reviews: [reviewSchema],
+    reviews: [
+      {
+        qualityRating: Number,
+        compassionRating: Number,
+        cleanlinessRating: Number,
+        efficiencyRating: Number,
+        costRange: String,
+        review: String,
+        userName: String,
+      },
+    ],
     images: [
       {
         imageUrl: {
@@ -47,14 +43,11 @@ const healthcareSchema = new mongoose.Schema(
       {
         question: String,
         answer: String,
-        user: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-        },
+        userName: String,
       },
     ],
     emailId: {
-      type: String, // You can define the type as String
+      type: String,
     },
   },
   { timestamps: true }
