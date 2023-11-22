@@ -90,7 +90,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api", adminRoutes);
 app.use("/api", reviewRoutes);
 app.use("/api", healthcareRoutes);
-app.use(faqRoutes);
+app.use( "/api", faqRoutes);
 app.use("/api/business", businessRoutes);
 
 app.use((err, req, res, next) => {
