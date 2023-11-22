@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 import Healthcare from "../models/healthcare.model.js";
 
 // Create a new FAQ for a Healthcare Entity
@@ -31,11 +33,11 @@ export const createFAQ = async (req, res) => {
 // Update an FAQ for a Healthcare Entity
 export const updateFAQ = async (req, res) => {
   try {
-    const { id, faqId } = req.params; // Get the healthcare entity ID and FAQ ID from the request parameters
+    const { name, faqId } = req.params; // Get the healthcare entity name and FAQ ID from the request parameters
     const { question, answer, userId } = req.body;
 
-    // Find the healthcare entity by its ID
-    const healthcareEntity = await Healthcare.findById(id);
+    // Find the healthcare entity by its name
+    const healthcareEntity = await Healthcare.findOne({ name });
 
     if (!healthcareEntity) {
       return res.status(404).json({ error: "Healthcare entity not found." });
@@ -62,6 +64,33 @@ export const updateFAQ = async (req, res) => {
     res
       .status(500)
       .json({ error: "An error occurred while updating the FAQ", error });
+  }
+};
+
+// Delete an FAQ for a Healthcare Entity
+export const deleteFAQ = async (req, res) => {
+  try {
+    const { name, faqId } = req.params; // Get the healthcare entity name and FAQ ID from the request parameters
+
+    // Find the healthcare entity by its name
+    const healthcareEntity = await Healthcare.findOne({ name });
+
+    if (!healthcareEntity) {
+      return res.status(404).json({ error: "Healthcare entity not found." });
+    }
+
+    // Remove the FAQ from the healthcare entity's FAQs
+    healthcareEntity.faq.pull(faqId);
+
+    // Save the updated healthcare entity
+    const updatedHealthcareEntity = await healthcareEntity.save();
+
+    res.status(200).json(updatedHealthcareEntity);
+  } catch (error) {
+    console.error("Error deleting FAQ:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while deleting the FAQ", error });
   }
 };
 
