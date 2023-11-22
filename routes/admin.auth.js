@@ -1,14 +1,11 @@
-// admin.auth.js
 import express from "express";
 import passport from "passport";
 
 const router = express.Router();
 
-// Define the default admin username and password
 const defaultAdminUsername = "admin";
-const defaultAdminPassword = "your_default_password"; // Replace with your desired default password
+const defaultAdminPassword = "your_default_password";
 
-// Admin login route
 router.post("/admin/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
