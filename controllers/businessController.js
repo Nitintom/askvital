@@ -1,6 +1,5 @@
 import BusinessSubmission from "../models/businessSubmissionModel.js";
-import fs from "fs/promises"; // Use fs.promises to handle file operations
-import multer from "multer";
+import Healthcare from "../models/healthcare.model.js";
 import {
   notifyAdmin,
   removeNotificationById,
@@ -19,12 +18,12 @@ export const submitBusiness = async (req, res) => {
       timings,
       about,
       speciality,
+      emailId,
+      images, // Assuming images is an array of image URLs
     } = req.body;
 
-    // Assuming you have received an image URL from the frontend (imgbb API or elsewhere)
-    const imageUrl = req.body.image;
-
-    if (!imageUrl) {
+    // Ensure that at least one image URL is provided
+    if (!images || images.length === 0) {
       console.error("No image URL received");
       return res.status(400).json({ message: "Image URL is required" });
     }
@@ -39,22 +38,45 @@ export const submitBusiness = async (req, res) => {
       timings,
       about,
       speciality,
-      images: [
-        {
-          imageUrl: imageUrl, // Set the URL of the uploaded image
-        },
-      ],
+      emailId,
+      images: images.map((imageUrl) => ({ imageUrl })), // Map image URLs to the required structure
     });
 
     newSubmission.status = "Pending";
 
+    // Save the business submission
     await newSubmission.save();
     notifyAdmin(newSubmission);
 
+    // Create a new healthcare entity using the business submission data
+    const newHealthcare = new Healthcare({
+      name,
+      categories,
+      city,
+      fulladdress,
+      timings,
+      contactnumber,
+      about,
+      speciality,
+      emailId,
+      images: images.map((imageUrl) => ({ imageUrl })), // Map image URLs to the required structure
+    });
+
+    // Save the healthcare entity
+    await newHealthcare.save();
+
     const pendingNotifications = getPendingNotifications();
 
+    console.log(
+      "Business submission and healthcare creation successful:",
+      newSubmission,
+      newHealthcare
+    );
+    console.log("Pending notifications:", pendingNotifications);
+
     res.status(201).json({
-      message: "Business submission received and pending approval.",
+      message:
+        "Business submission and healthcare creation received and pending approval.",
       pendingNotifications,
     });
   } catch (error) {
@@ -62,6 +84,8 @@ export const submitBusiness = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+// ... (other controller functions)
 
 export const getPendingSubmissions = async (req, res) => {
   try {

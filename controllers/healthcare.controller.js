@@ -129,6 +129,24 @@ export const getHealthcareById = async (req, res) => {
   }
 };
 
+// Get a specific healthcare entity by name
+export const getHealthcareByName = async (req, res) => {
+  const { name } = req.params;
+
+  try {
+    const healthcareEntity = await Healthcare.findOne({ name: name });
+
+    if (!healthcareEntity) {
+      return res.status(404).json({ message: "Healthcare entity not found" });
+    }
+
+    res.json(healthcareEntity);
+  } catch (error) {
+    console.error("Error fetching healthcare entity:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 export const getHealthcareByCity = async (req, res) => {
   const { city } = req.params;
   try {
