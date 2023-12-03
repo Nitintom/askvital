@@ -7,6 +7,7 @@ import {
   getHealthcareById,
   getHealthcareByCity,
   uploadAndImportExcel,
+  getHealthcareByName,
   // Add other controllers as needed
 } from "../controllers/healthcare.controller.js";
 
@@ -15,6 +16,7 @@ const router = express.Router();
 // Public routes
 router.get("/healthcare", getAllHealthcare);
 router.get("/healthcare/:id", getHealthcareById);
+router.get("/healthcare/:name", getHealthcareByName);
 router.get("/healthcare/city/:city", getHealthcareByCity);
 
 // Admin routes

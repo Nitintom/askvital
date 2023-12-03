@@ -17,4 +17,3 @@ router.get("/account/admin/users", accountController.adminRoute);
 router.delete("/account/admin/delete/:id", accountController.deleteUserByAdmin);
 
 export default router;
-
