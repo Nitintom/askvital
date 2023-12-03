@@ -15,6 +15,7 @@ import healthcareRoutes from "./routes/healthcare.route.js";
 import reviewRoutes from "./routes/review.js";
 import faqRoutes from "./routes/faq.route.js";
 import businessRoutes from "./routes/businessRoutes.js";
+import accountRoutes from "./routes/account.route.js";
 
 dotenv.config();
 
@@ -92,6 +93,7 @@ app.use("/api", reviewRoutes);
 app.use("/api", healthcareRoutes);
 app.use( "/api", faqRoutes);
 app.use("/api/business", businessRoutes);
+app.use("/api", accountRoutes);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
